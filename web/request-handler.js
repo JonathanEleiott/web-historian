@@ -8,13 +8,18 @@ exports.handleRequest = function (req, res) {
   var header = helper.headers;
   var statusCode;
 
+  //ROOT FILE
   if (req.method === 'GET' && req.url === '/') {
     statusCode = 200;
 
     helper.serveAssets(res, req.url, function (file) {
       res.writeHead(statusCode, header);
-      console.log('file is ', file);
       res.end(file);
     });
+  } else if (req.method === 'GET') {
+    //If URL is 'GET' and not our root, check archives for URL
+    
   }
+
+
 };
