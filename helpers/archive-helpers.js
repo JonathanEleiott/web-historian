@@ -31,28 +31,35 @@ exports.readListOfUrls = function(func) {
     listOfUrls.push(data);
     listOfUrls = listOfUrls[0].replace(/\r?\n|\r/g, ',');
     listOfUrls = listOfUrls.split(',');
-    console.log(listOfUrls);
     return func(err, listOfUrls);
+  }); 
+};
+
+exports.isUrlInList = function(url, func) {
+  this.readListOfUrls(function(err, urls) {
+    for (var i = 0; i < urls.length; i++) {
+      if (urls[i] === url) {
+        return func(err, true);
+      }
+    }
+    return func(err, false);
   });
 };
 
-exports.isUrlInList = function(url) {
-  fs.readFile(this.paths.list, 'utf8', function (err, data) {
-    console.log(data);
-    if (data === url) {
-      return true;
-    } else {
-      return false;
+exports.addUrlToList = function(url, func) {
+  fs.writeFile(this.paths.list, url, 'utf8', function(err) {
+    if (!err) {
+      func(err);
     }
   });
 };
 
-exports.addUrlToList = function() {
-
-};
-
-exports.isUrlArchived = function() {
-
+exports.isUrlArchived = function(url, func) {
+  if (this.archivedSites + '/' + url) {
+    return func(err, true);
+  } else {
+    return func(err, false);
+  }
 };
 
 exports.downloadUrls = function() {
