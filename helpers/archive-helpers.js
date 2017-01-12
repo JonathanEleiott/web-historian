@@ -55,13 +55,22 @@ exports.addUrlToList = function(url, func) {
 };
 
 exports.isUrlArchived = function(url, func) {
-  if (this.archivedSites + '/' + url) {
-    return func(err, true);
-  } else {
-    return func(err, false);
-  }
+  fs.readFile(this.paths.archivedSites + '/' + url, 'utf8', function (err, data) {
+    if (data) {
+      return func(err, true);
+    } else if (!data) {
+      err = null;
+      return func(err, false);
+    }
+  });
 };
 
-exports.downloadUrls = function() {
-
+exports.downloadUrls = function(array) {
+  for (var i = 0; i < array.length; i++ ) {
+    fs.writeFile(this.paths.archivedSites + '/' + array[i], 'utf8', function (err) {
+      if (err) {  
+        console.log('error is ', err);
+      }
+    });
+  }
 };
