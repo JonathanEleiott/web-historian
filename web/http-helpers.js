@@ -19,7 +19,7 @@ exports.serveAssets = function(res, asset, callback) {
     fs.readFile(archive.paths.siteAssets + asset, 'utf8', function (err, data) {
       return callback(data);
     }); 
-  } else if (asset === '/index.html') {
+  } else if (asset === '/loading.html') {
     fs.readFile(archive.paths.siteAssets + asset, 'utf8', function (err, data) {
       return callback(data);
     }); 

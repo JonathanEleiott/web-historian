@@ -44,8 +44,10 @@ exports.handleRequest = function (req, res) {
         if (err) {
           console.log('error on POST: ', err);
         }
-        res.writeHead(statusCode, header);
-        res.end();
+        helper.serveAssets(res, '/loading.html', function(file) {
+          res.writeHead(statusCode, header);
+          res.end(file);
+        });
       });
     });
   }
