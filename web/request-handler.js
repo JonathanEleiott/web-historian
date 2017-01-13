@@ -33,13 +33,20 @@ exports.handleRequest = function (req, res) {
     });
   } else if (req.method === 'POST') {
     statusCode = 302;
-    console.log('req.url is ', req.url);
-    archive.addUrlToList (req.url, function (err) {
-      if (err) {
-        console.log('error on POST: ', err);
-      }
-      res.writeHead(statusCode, header);
-      res.end();
+    var chunkToString = '';
+    req.on('data', function (chunk) {
+      chunkToString += chunk;
+      chunkToString = chunkToString.slice(4);
+    });
+    req.on('end', function () {
+      chunkToString += '\n';
+      archive.addUrlToList (chunkToString, function (err) {
+        if (err) {
+          console.log('error on POST: ', err);
+        }
+        res.writeHead(statusCode, header);
+        res.end();
+      });
     });
   }
 
